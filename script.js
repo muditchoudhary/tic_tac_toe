@@ -27,6 +27,7 @@ const game = (() => {
     let i = 0;
     for (box of boxes) {
       box.innerText = array[i];
+      box.setAttribute('data-isclick', 'not-clicked');
       i++;
     }
   };
@@ -34,8 +35,12 @@ const game = (() => {
   const addClickEventOnBox = () => {
     boxes.forEach((box) => {
       box.addEventListener("click", (e) => {
-        const player = checkWhichPlayer();
-        player.addMarker(e.target, player.getMarker());
+        console.log(e.target.getAttribute('data-isclick'));
+        if (e.target.getAttribute('data-isclick') === 'not-clicked') {
+            const player = checkWhichPlayer();
+            player.addMarker(e.target, player.getMarker());
+            e.target.setAttribute('data-isclick', 'clicked');
+        }
       });
     });
   };
@@ -48,6 +53,10 @@ const game = (() => {
       currentPlayer = playerOne;
       return playerTwo;
     }
+  };
+
+  const removeClickEventFromBox = (box) => {
+    box.removeEventListener("click", () => {});
   };
   return { renderMarker, addClickEventOnBox };
 })();
