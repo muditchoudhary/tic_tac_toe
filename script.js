@@ -145,24 +145,37 @@ const game = (() => {
 })();
 
 const windowController = (() => {
-	showPlayerDetailsWindow = () => {};
+	const showPlayerDetailsWindow = () => {
+		const window = document.querySelector(".player-details-window");
+		window.style.display = "grid";
+	};
 
-	showGameWindow = () => {};
-	return { showPlayerDetailsWindow, showGameWindow };
+	const showGameWindow = () => {
+		const window = document.querySelector(".game-window");
+		window.style.display = "grid";
+	};
+
+	const hidePlayerDetailsWindow = () => {
+		const window = document.querySelector(".player-details-window");
+		window.style.display = "none";
+	};
+	return { showPlayerDetailsWindow, showGameWindow, hidePlayerDetailsWindow };
 })();
 
 const playerDetailsWindow = (() => {
-    let playerOneName;
-    let playerTwoName;
+	let playerOneName;
+	let playerTwoName;
 	const playBtn = document.querySelector(".submit");
 	playBtn.addEventListener("click", _checkFormFilled);
 
-	function _checkFormFilled() {
+	function _checkFormFilled(event) {
+        event.preventDefault();
 		const playerNames = document.querySelectorAll(".name");
 		playerOneName = playerNames[0].value;
 		playerTwoName = playerNames[1].value;
 
-		if (playerOneName !== '' && playerTwoName !== '') {
+		if (playerOneName !== "" && playerTwoName !== "") {
+			windowController.hidePlayerDetailsWindow();
 			windowController.showGameWindow();
 		} else {
 			alert("Fill all the fields!!");
