@@ -53,7 +53,7 @@ form button {
 .heading {
 	display: flex;
 	align-items: center;
-	font-size: 80px;
+	font-size: 68px;
 	justify-content: center;
 	margin: 10px;
 	width: 100%;
@@ -65,16 +65,23 @@ form button {
 	margin: 0px 40px;
 }
 
+.game-window {
+	display: grid;
+	grid-template-rows: 0.2fr 1fr 0.1fr;
+	height: 100vh;
+	background: lightblue;
+	justify-items: center;
+	padding: 15px 0px;
+}
+
 .board {
-	/* Temporarly hiding board 
-    because working on player details window */
-	display: none;
-	width: 400px;
-	height: 400px;
+	display: grid;
+	width: 450px;
+	height: 450px;
 	border: 2px solid red;
 	grid-template-columns: repeat(3, 3fr);
 	grid-template-rows: repeat(3, 3fr);
-	margin: auto;
+	align-self: center;
 }
 
 .box {
@@ -82,4 +89,12 @@ form button {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.reset {
+    width: 30%;
+    border-radius: 35px;
+    font-size: 28px;
+    height: 45px;
+    align-self: center;
 }
