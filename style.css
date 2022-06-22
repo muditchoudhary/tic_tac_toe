@@ -4,6 +4,67 @@
 	box-sizing: border-box;
 }
 
+.player-details-window {
+	display: grid;
+	grid-template-rows: 0.2fr 1fr;
+	height: 100vh;
+	align-items: center;
+}
+
+form {
+	justify-self: center;
+	width: 70%;
+	/* align-self: center; */
+	height: 65%;
+	display: grid;
+	grid-template-rows: 1fr 1fr 1fr;
+	justify-items: center;
+	align-items: center;
+	border: 3px groove black;
+	border-radius: 20px;
+	box-shadow: 12px 18px 14px -12px #000000;
+}
+
+form label,
+input {
+	font-size: 30px;
+	padding: 10px;
+	margin: 20px;
+}
+
+form input {
+	border-radius: 30px;
+	width: 50%;
+}
+
+form button {
+	width: 30%;
+	height: 50px;
+	border-radius: 30px;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.heading img {
+	width: 55px;
+	height: auto;
+}
+
+.heading {
+	display: flex;
+	align-items: center;
+	font-size: 80px;
+	justify-content: center;
+	margin: 10px;
+	width: 100%;
+	padding-bottom: 20px;
+	border-bottom: 2px solid black;
+}
+
+.heading span {
+	margin: 0px 40px;
+}
+
 .board {
 	/* Temporarly hiding board 
     because working on player details window */
