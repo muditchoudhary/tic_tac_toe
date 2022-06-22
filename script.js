@@ -153,6 +153,8 @@ const windowController = (() => {
 	const showGameWindow = () => {
 		const window = document.querySelector(".game-window");
 		window.style.display = "grid";
+        game.renderMarker();
+        game.addClickEventOnBox();
 	};
 
 	const hidePlayerDetailsWindow = () => {
