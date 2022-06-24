@@ -98,3 +98,8 @@ form button {
     height: 45px;
     align-self: center;
 }
+
+.win-boxes {
+	border: 1px solid blue;
+    background: lightgreen;
+}

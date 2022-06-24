@@ -6,8 +6,8 @@ const gameBoard = (() => {
 	};
 
 	const reset = () => {
-        array = ["", "", "", "", "", "", "", "", ""];
-    };
+		array = ["", "", "", "", "", "", "", "", ""];
+	};
 	return { array: getArray, reset, getArray };
 })();
 
@@ -49,7 +49,7 @@ const game = (() => {
 			const player = switchPlayer();
 			player.addMarker(e.target, player.getMarker());
 			const boxIndex = e.target.getAttribute("data-index");
-            const array = gameBoard.getArray();
+			const array = gameBoard.getArray();
 			array[boxIndex] = player.getMarker();
 			e.target.setAttribute("data-isclick", "clicked");
 			lengthCounter++;
@@ -73,12 +73,29 @@ const game = (() => {
 		}
 	};
 
+	const chnageMatchedBoxColor = (boxOneIndex, boxTwoIndex, boxThreeIndex) => {
+		const changeBackground = (box) => {
+			box.classList.add("win-boxes");
+		};
+        
+		boxes.forEach((box) => {
+			if (box.getAttribute("data-index") === boxOneIndex)
+				changeBackground(box);
+			if (box.getAttribute("data-index") === boxTwoIndex)
+				changeBackground(box);
+			if (box.getAttribute("data-index") === boxThreeIndex)
+				changeBackground(box);
+		});
+
+		let winBoxes = [];
+	};
 	const checkGameOver = () => {
 		if (
 			(array[0] === "X" && array[1] === "X" && array[2] === "X") ||
 			(array[0] === "O" && array[1] === "O" && array[2] === "O")
 		) {
 			console.log("win");
+			chnageMatchedBoxColor("0", "1", "2");
 			gameOver();
 		}
 		if (
