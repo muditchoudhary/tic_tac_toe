@@ -43,16 +43,49 @@ const game = (() => {
 			i++;
 		}
 	};
+    
+    const displayPlayerNames = (playerOneName, playerTwoName) => {
+        const nameSpans = document.querySelectorAll('.player-names');
+        nameSpans[0].innerText = playerOneName;
+        nameSpans[1].innerText = playerTwoName;
+    }
+
+    const highlightPlayerAndMarker = () => {
+        const firstNameSpan = document.querySelector('#first');
+        const secondNameSpan = document.querySelector('#second');
+        const zeroLogo = document.querySelector('#zero');
+        const crossLogo = document.querySelector('#cross');
+
+        const unHightlight = (element, logo) => {
+            element.style.color = 'black';
+            logo.classList.remove('highlight');
+            
+        }
+        if (currentPlayer === playerOne) {
+            unHightlight(secondNameSpan, crossLogo);
+            firstNameSpan.style.color = 'darkgreen';
+            zeroLogo.classList.add('highlight');
+        } else {
+            unHightlight(firstNameSpan, zeroLogo);
+            secondNameSpan.style.color = 'darkgreen';
+            crossLogo.classList.add('highlight');
+        }
+        
+    }
 
     const initialzePlayers = (playerOneName, playerTwoName) => {
-        playerOne = player(playerOneName, 'X');
-        playerTwo = player(playerTwoName, 'O');
+        playerOne = player(playerOneName, 'O');
+        playerTwo = player(playerTwoName, 'X');
         currentPlayer = playerOne;
+
+        displayPlayerNames(playerOne.getName(), playerTwo.getName());
+        highlightPlayerAndMarker()
     }
 
 	const anynamousFunctionHandler = (e) => {
 		if (e.target.getAttribute("data-isclick") === "not-clicked") {
 			const player = switchPlayer();
+            highlightPlayerAndMarker()
 			player.addMarker(e.target, player.getMarker());
 			const boxIndex = e.target.getAttribute("data-index");
 			const array = gameBoard.getArray();
