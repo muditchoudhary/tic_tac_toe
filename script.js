@@ -24,11 +24,10 @@ const player = (name, marker) => {
 };
 
 const game = (() => {
-	const playerOne = player("Mudit", "X");
-	const playerTwo = player("Rohan", "O");
+	let playerOne;
+	let playerTwo;
+    let currentPlayer;
 	const boxes = document.querySelectorAll(".box");
-	const defaultPlayer = playerOne;
-	let currentPlayer = defaultPlayer;
 	let array = gameBoard.getArray();
 	let lengthCounter = 0;
 	const resetBtn = document.querySelector(".reset");
@@ -40,9 +39,16 @@ const game = (() => {
 			box.innerText = array[i];
 			box.setAttribute("data-isclick", "not-clicked");
 			box.setAttribute("data-index", `${i}`);
+            box.classList.remove('win-boxes');
 			i++;
 		}
 	};
+
+    const initialzePlayers = (playerOneName, playerTwoName) => {
+        playerOne = player(playerOneName, 'X');
+        playerTwo = player(playerTwoName, 'O');
+        currentPlayer = playerOne;
+    }
 
 	const anynamousFunctionHandler = (e) => {
 		if (e.target.getAttribute("data-isclick") === "not-clicked") {
@@ -77,7 +83,7 @@ const game = (() => {
 		const changeBackground = (box) => {
 			box.classList.add("win-boxes");
 		};
-        
+
 		boxes.forEach((box) => {
 			if (box.getAttribute("data-index") === boxOneIndex)
 				changeBackground(box);
@@ -89,6 +95,7 @@ const game = (() => {
 
 		let winBoxes = [];
 	};
+    
 	const checkGameOver = () => {
 		if (
 			(array[0] === "X" && array[1] === "X" && array[2] === "X") ||
@@ -103,6 +110,7 @@ const game = (() => {
 			(array[3] === "O" && array[4] === "O" && array[5] === "O")
 		) {
 			console.log("win");
+            chnageMatchedBoxColor("3", "4", "5");
 			gameOver();
 		}
 		if (
@@ -110,6 +118,7 @@ const game = (() => {
 			(array[6] === "O" && array[7] === "O" && array[8] === "O")
 		) {
 			console.log("win");
+            chnageMatchedBoxColor("6", "7", "8");
 			gameOver();
 		}
 		if (
@@ -117,6 +126,7 @@ const game = (() => {
 			(array[0] === "O" && array[3] === "O" && array[6] === "O")
 		) {
 			console.log("win");
+            chnageMatchedBoxColor("0", "3", "6");
 			gameOver();
 		}
 		if (
@@ -124,6 +134,7 @@ const game = (() => {
 			(array[1] === "O" && array[4] === "O" && array[7] === "O")
 		) {
 			console.log("win");
+            chnageMatchedBoxColor("1", "4", "7");
 			gameOver();
 		}
 		if (
@@ -131,6 +142,7 @@ const game = (() => {
 			(array[2] === "O" && array[5] === "O" && array[8] === "O")
 		) {
 			console.log("win");
+            chnageMatchedBoxColor("2", "5", "8");
 			gameOver();
 		}
 		if (
@@ -138,6 +150,7 @@ const game = (() => {
 			(array[0] === "O" && array[4] === "O" && array[8] === "O")
 		) {
 			console.log("win");
+            chnageMatchedBoxColor("0", "4", "8");
 			gameOver();
 		}
 		if (
@@ -145,6 +158,7 @@ const game = (() => {
 			(array[2] === "O" && array[4] === "O" && array[6] === "O")
 		) {
 			console.log("win");
+            chnageMatchedBoxColor("2", "4", "6");
 			gameOver();
 		}
 		if (checkArrayFilled()) {
@@ -173,9 +187,10 @@ const game = (() => {
 	function resetGame() {
 		gameBoard.reset();
 		array = gameBoard.getArray();
+        lengthCounter = 0;
 		windowController.showPlayerDetailsWindow();
 	}
-	return { renderMarker, addClickEventOnBox };
+	return { renderMarker, addClickEventOnBox, initialzePlayers };
 })();
 
 const windowController = (() => {
@@ -186,11 +201,12 @@ const windowController = (() => {
 		showWindow.style.display = "grid";
 	};
 
-	const showGameWindow = () => {
+	const showGameWindow = (playerOneName, playerTwoName) => {
 		const hideWindow = document.querySelector(".player-details-window");
 		hideWindow.style.display = "none";
 		const showWindow = document.querySelector(".game-window");
 		showWindow.style.display = "grid";
+        game.initialzePlayers(playerOneName, playerTwoName);
 		game.renderMarker();
 		game.addClickEventOnBox();
 	};
@@ -216,7 +232,7 @@ const playerDetailsWindow = (() => {
 		_clearNameFields(playerNames[0], playerNames[1]);
 
 		if (playerOneName !== "" && playerTwoName !== "") {
-			windowController.showGameWindow();
+			windowController.showGameWindow(playerOneName, playerTwoName);
 		} else {
 			alert("Fill all the fields!!");
 		}
