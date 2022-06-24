@@ -11,13 +11,15 @@ const gameBoard = (() => {
 	return { array: getArray, reset, getArray };
 })();
 
-const player = (name, marker) => {
+const player = (name, marker, markerColor) => {
 	const boxes = document.querySelectorAll(".box");
 	const getName = () => name;
 	const getMarker = () => marker;
+    const getMarkerColor = () => markerColor;
 
 	const addMarker = (box, marker) => {
 		box.innerText = marker;
+        box.style.color = getMarkerColor();
 	};
 
 	return { getName, getMarker, addMarker };
@@ -56,26 +58,27 @@ const game = (() => {
         const zeroLogo = document.querySelector('#zero');
         const crossLogo = document.querySelector('#cross');
 
-        const unHightlight = (element, logo) => {
+        const unHightlight = (element, logo, logoBgClass) => {
             element.style.color = 'black';
-            logo.classList.remove('highlight');
+            logo.classList.remove(logoBgClass);
+
             
         }
         if (currentPlayer === playerOne) {
-            unHightlight(secondNameSpan, crossLogo);
-            firstNameSpan.style.color = 'darkgreen';
-            zeroLogo.classList.add('highlight');
+            unHightlight(secondNameSpan, crossLogo, 'highlight-second');
+            firstNameSpan.style.color = 'rgb(228 87 87)';
+            zeroLogo.classList.add('highlight-first');
         } else {
-            unHightlight(firstNameSpan, zeroLogo);
-            secondNameSpan.style.color = 'darkgreen';
-            crossLogo.classList.add('highlight');
+            unHightlight(firstNameSpan, zeroLogo, 'highlight-first');
+            secondNameSpan.style.color = 'rgb(255, 183, 15)';
+            crossLogo.classList.add('highlight-second');
         }
         
     }
 
     const initialzePlayers = (playerOneName, playerTwoName) => {
-        playerOne = player(playerOneName, 'O');
-        playerTwo = player(playerTwoName, 'X');
+        playerOne = player(playerOneName, 'O', 'rgb(228 87 87)');
+        playerTwo = player(playerTwoName, 'X', 'rgb(255, 183, 15)');
         currentPlayer = playerOne;
 
         displayPlayerNames(playerOne.getName(), playerTwo.getName());
@@ -134,7 +137,6 @@ const game = (() => {
 			(array[0] === "X" && array[1] === "X" && array[2] === "X") ||
 			(array[0] === "O" && array[1] === "O" && array[2] === "O")
 		) {
-			console.log("win");
 			chnageMatchedBoxColor("0", "1", "2");
 			gameOver();
 		}
