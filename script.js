@@ -1,6 +1,14 @@
 const gameBoard = (() => {
-	const array = ["", "", "", "", "", "", "", "", ""];
-	return { array };
+	let array = ["", "", "", "", "", "", "", "", ""];
+
+	const getArray = () => {
+		return array;
+	};
+
+	const reset = () => {
+        array = ["", "", "", "", "", "", "", "", ""];
+    };
+	return { array: getArray, reset, getArray };
 })();
 
 const player = (name, marker) => {
@@ -21,8 +29,10 @@ const game = (() => {
 	const boxes = document.querySelectorAll(".box");
 	const defaultPlayer = playerOne;
 	let currentPlayer = defaultPlayer;
-	const array = gameBoard.array;
+	let array = gameBoard.getArray();
 	let lengthCounter = 0;
+	const resetBtn = document.querySelector(".reset");
+	resetBtn.addEventListener("click", resetGame);
 
 	const renderMarker = () => {
 		let i = 0;
@@ -39,7 +49,8 @@ const game = (() => {
 			const player = switchPlayer();
 			player.addMarker(e.target, player.getMarker());
 			const boxIndex = e.target.getAttribute("data-index");
-			gameBoard.array[boxIndex] = player.getMarker();
+            const array = gameBoard.getArray();
+			array[boxIndex] = player.getMarker();
 			e.target.setAttribute("data-isclick", "clicked");
 			lengthCounter++;
 			checkGameOver();
@@ -126,7 +137,7 @@ const game = (() => {
 	};
 
 	const checkArrayFilled = () => {
-		if (lengthCounter === gameBoard.array.length) {
+		if (lengthCounter === gameBoard.getArray().length) {
 			return true;
 		}
 		return false;
@@ -141,27 +152,33 @@ const game = (() => {
 			box.removeEventListener("click", anynamousFunctionHandler);
 		});
 	};
+
+	function resetGame() {
+		gameBoard.reset();
+		array = gameBoard.getArray();
+		windowController.showPlayerDetailsWindow();
+	}
 	return { renderMarker, addClickEventOnBox };
 })();
 
 const windowController = (() => {
 	const showPlayerDetailsWindow = () => {
-		const window = document.querySelector(".player-details-window");
-		window.style.display = "grid";
+		const hideWindow = document.querySelector(".game-window");
+		hideWindow.style.display = "none";
+		const showWindow = document.querySelector(".player-details-window");
+		showWindow.style.display = "grid";
 	};
 
 	const showGameWindow = () => {
-		const window = document.querySelector(".game-window");
-		window.style.display = "grid";
-        game.renderMarker();
-        game.addClickEventOnBox();
+		const hideWindow = document.querySelector(".player-details-window");
+		hideWindow.style.display = "none";
+		const showWindow = document.querySelector(".game-window");
+		showWindow.style.display = "grid";
+		game.renderMarker();
+		game.addClickEventOnBox();
 	};
 
-	const hidePlayerDetailsWindow = () => {
-		const window = document.querySelector(".player-details-window");
-		window.style.display = "none";
-	};
-	return { showPlayerDetailsWindow, showGameWindow, hidePlayerDetailsWindow };
+	return { showPlayerDetailsWindow, showGameWindow };
 })();
 
 const playerDetailsWindow = (() => {
@@ -170,14 +187,18 @@ const playerDetailsWindow = (() => {
 	const playBtn = document.querySelector(".submit");
 	playBtn.addEventListener("click", _checkFormFilled);
 
+	const _clearNameFields = (fieldOne, fieldTwo) => {
+		fieldOne.value = "";
+		fieldTwo.value = "";
+	};
 	function _checkFormFilled(event) {
-        event.preventDefault();
+		event.preventDefault();
 		const playerNames = document.querySelectorAll(".name");
 		playerOneName = playerNames[0].value;
 		playerTwoName = playerNames[1].value;
+		_clearNameFields(playerNames[0], playerNames[1]);
 
 		if (playerOneName !== "" && playerTwoName !== "") {
-			windowController.hidePlayerDetailsWindow();
 			windowController.showGameWindow();
 		} else {
 			alert("Fill all the fields!!");
