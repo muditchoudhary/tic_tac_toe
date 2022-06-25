@@ -15,11 +15,11 @@ const player = (name, marker, markerColor) => {
 	const boxes = document.querySelectorAll(".box");
 	const getName = () => name;
 	const getMarker = () => marker;
-    const getMarkerColor = () => markerColor;
+	const getMarkerColor = () => markerColor;
 
 	const addMarker = (box, marker) => {
 		box.innerText = marker;
-        box.style.color = getMarkerColor();
+		box.style.color = getMarkerColor();
 	};
 
 	return { getName, getMarker, addMarker };
@@ -28,12 +28,14 @@ const player = (name, marker, markerColor) => {
 const game = (() => {
 	let playerOne;
 	let playerTwo;
-    let currentPlayer;
+	let currentPlayer;
 	const boxes = document.querySelectorAll(".box");
 	let array = gameBoard.getArray();
 	let lengthCounter = 0;
 	const resetBtn = document.querySelector(".reset");
 	resetBtn.addEventListener("click", resetGame);
+	const playAgainBtn = document.querySelector(".btn");
+    playAgainBtn.addEventListener('click', resetGame);
 
 	const renderMarker = () => {
 		let i = 0;
@@ -41,54 +43,51 @@ const game = (() => {
 			box.innerText = array[i];
 			box.setAttribute("data-isclick", "not-clicked");
 			box.setAttribute("data-index", `${i}`);
-            box.classList.remove('win-boxes');
+			box.classList.remove("win-boxes");
 			i++;
 		}
 	};
-    
-    const displayPlayerNames = (playerOneName, playerTwoName) => {
-        const nameSpans = document.querySelectorAll('.player-names');
-        nameSpans[0].innerText = playerOneName;
-        nameSpans[1].innerText = playerTwoName;
-    }
 
-    const highlightPlayerAndMarker = () => {
-        const firstNameSpan = document.querySelector('#first');
-        const secondNameSpan = document.querySelector('#second');
-        const zeroLogo = document.querySelector('#zero');
-        const crossLogo = document.querySelector('#cross');
+	const displayPlayerNames = (playerOneName, playerTwoName) => {
+		const nameSpans = document.querySelectorAll(".player-names");
+		nameSpans[0].innerText = playerOneName;
+		nameSpans[1].innerText = playerTwoName;
+	};
 
-        const unHightlight = (element, logo, logoBgClass) => {
-            element.style.color = 'black';
-            logo.classList.remove(logoBgClass);
+	const highlightPlayerAndMarker = () => {
+		const firstNameSpan = document.querySelector("#first");
+		const secondNameSpan = document.querySelector("#second");
+		const zeroLogo = document.querySelector("#zero");
+		const crossLogo = document.querySelector("#cross");
 
-            
-        }
-        if (currentPlayer === playerOne) {
-            unHightlight(secondNameSpan, crossLogo, 'highlight-second');
-            firstNameSpan.style.color = 'rgb(228 87 87)';
-            zeroLogo.classList.add('highlight-first');
-        } else {
-            unHightlight(firstNameSpan, zeroLogo, 'highlight-first');
-            secondNameSpan.style.color = 'rgb(255, 183, 15)';
-            crossLogo.classList.add('highlight-second');
-        }
-        
-    }
+		const unHightlight = (element, logo, logoBgClass) => {
+			element.style.color = "black";
+			logo.classList.remove(logoBgClass);
+		};
+		if (currentPlayer === playerOne) {
+			unHightlight(secondNameSpan, crossLogo, "highlight-second");
+			firstNameSpan.style.color = "rgb(228 87 87)";
+			zeroLogo.classList.add("highlight-first");
+		} else {
+			unHightlight(firstNameSpan, zeroLogo, "highlight-first");
+			secondNameSpan.style.color = "rgb(255, 183, 15)";
+			crossLogo.classList.add("highlight-second");
+		}
+	};
 
-    const initialzePlayers = (playerOneName, playerTwoName) => {
-        playerOne = player(playerOneName, 'O', 'rgb(228 87 87)');
-        playerTwo = player(playerTwoName, 'X', 'rgb(255, 183, 15)');
-        currentPlayer = playerOne;
+	const initialzePlayers = (playerOneName, playerTwoName) => {
+		playerOne = player(playerOneName, "O", "rgb(228 87 87)");
+		playerTwo = player(playerTwoName, "X", "rgb(255, 183, 15)");
+		currentPlayer = playerOne;
 
-        displayPlayerNames(playerOne.getName(), playerTwo.getName());
-        highlightPlayerAndMarker()
-    }
+		displayPlayerNames(playerOne.getName(), playerTwo.getName());
+		highlightPlayerAndMarker();
+	};
 
 	const anynamousFunctionHandler = (e) => {
 		if (e.target.getAttribute("data-isclick") === "not-clicked") {
 			const player = switchPlayer();
-            highlightPlayerAndMarker()
+			highlightPlayerAndMarker();
 			player.addMarker(e.target, player.getMarker());
 			const boxIndex = e.target.getAttribute("data-index");
 			const array = gameBoard.getArray();
@@ -128,77 +127,63 @@ const game = (() => {
 			if (box.getAttribute("data-index") === boxThreeIndex)
 				changeBackground(box);
 		});
-
-		let winBoxes = [];
 	};
-    
-	const checkGameOver = () => {
-		if (
-			(array[0] === "X" && array[1] === "X" && array[2] === "X") ||
-			(array[0] === "O" && array[1] === "O" && array[2] === "O")
-		) {
+
+	const isRowMathched = (marker) => {
+		if (array[0] === marker && array[1] === marker && array[2] === marker) {
 			chnageMatchedBoxColor("0", "1", "2");
-			gameOver();
+			return true;
 		}
-		if (
-			(array[3] === "X" && array[4] === "X" && array[5] === "X") ||
-			(array[3] === "O" && array[4] === "O" && array[5] === "O")
-		) {
+		if (array[3] === marker && array[4] === marker && array[5] === marker) {
 			console.log("win");
-            chnageMatchedBoxColor("3", "4", "5");
-			gameOver();
+			chnageMatchedBoxColor("3", "4", "5");
+			return true;
 		}
-		if (
-			(array[6] === "X" && array[7] === "X" && array[8] === "X") ||
-			(array[6] === "O" && array[7] === "O" && array[8] === "O")
-		) {
+		if (array[6] === marker && array[7] === marker && array[8] === marker) {
 			console.log("win");
-            chnageMatchedBoxColor("6", "7", "8");
-			gameOver();
+			chnageMatchedBoxColor("6", "7", "8");
+			return true;
 		}
-		if (
-			(array[0] === "X" && array[3] === "X" && array[6] === "X") ||
-			(array[0] === "O" && array[3] === "O" && array[6] === "O")
-		) {
+		if (array[0] === marker && array[3] === marker && array[6] === marker) {
 			console.log("win");
-            chnageMatchedBoxColor("0", "3", "6");
-			gameOver();
+			chnageMatchedBoxColor("0", "3", "6");
+			return true;
 		}
-		if (
-			(array[1] === "X" && array[4] === "X" && array[7] === "X") ||
-			(array[1] === "O" && array[4] === "O" && array[7] === "O")
-		) {
+		if (array[1] === marker && array[4] === marker && array[7] === marker) {
 			console.log("win");
-            chnageMatchedBoxColor("1", "4", "7");
-			gameOver();
+			chnageMatchedBoxColor("1", "4", "7");
+			return true;
 		}
-		if (
-			(array[2] === "X" && array[5] === "X" && array[8] === "X") ||
-			(array[2] === "O" && array[5] === "O" && array[8] === "O")
-		) {
+		if (array[2] === marker && array[5] === marker && array[8] === marker) {
 			console.log("win");
-            chnageMatchedBoxColor("2", "5", "8");
-			gameOver();
+			chnageMatchedBoxColor("2", "5", "8");
+			return true;
 		}
-		if (
-			(array[0] === "X" && array[4] === "X" && array[8] === "X") ||
-			(array[0] === "O" && array[4] === "O" && array[8] === "O")
-		) {
+		if (array[0] === marker && array[4] === marker && array[8] === marker) {
 			console.log("win");
-            chnageMatchedBoxColor("0", "4", "8");
-			gameOver();
+			chnageMatchedBoxColor("0", "4", "8");
+			return true;
 		}
-		if (
-			(array[2] === "X" && array[4] === "X" && array[6] === "X") ||
-			(array[2] === "O" && array[4] === "O" && array[6] === "O")
-		) {
+		if (array[2] === marker && array[4] === marker && array[6] === marker) {
 			console.log("win");
-            chnageMatchedBoxColor("2", "4", "6");
-			gameOver();
+			chnageMatchedBoxColor("2", "4", "6");
+			return true;
 		}
-		if (checkArrayFilled()) {
-			console.log("Tie");
+	};
+
+	const checkGameOver = () => {
+		const isXWinner = isRowMathched("X");
+		const isOWinner = isRowMathched("O");
+
+		if (isXWinner) {
 			gameOver();
+			windowController.showModal(`${playerTwo.getName()} wins!!`);
+		} else if (isOWinner) {
+			gameOver();
+            windowController.showModal(`${playerOne.getName()} wins!!`);
+		} else if (checkArrayFilled()) {
+            gameOver();
+            windowController.showModal('That was a tie!!');
 		}
 	};
 
@@ -222,8 +207,9 @@ const game = (() => {
 	function resetGame() {
 		gameBoard.reset();
 		array = gameBoard.getArray();
-        lengthCounter = 0;
+		lengthCounter = 0;
 		windowController.showPlayerDetailsWindow();
+        windowController.hideModal();
 	}
 	return { renderMarker, addClickEventOnBox, initialzePlayers };
 })();
@@ -241,12 +227,25 @@ const windowController = (() => {
 		hideWindow.style.display = "none";
 		const showWindow = document.querySelector(".game-window");
 		showWindow.style.display = "grid";
-        game.initialzePlayers(playerOneName, playerTwoName);
+		game.initialzePlayers(playerOneName, playerTwoName);
 		game.renderMarker();
 		game.addClickEventOnBox();
 	};
+    const showModal = (message) => {
+        const modal = document.querySelector('.modal');
+        const para = document.querySelector('.message');
+        modal.style.display = 'flex';
+        para.innerText = message;
 
-	return { showPlayerDetailsWindow, showGameWindow };
+    }
+    const hideModal = () => {
+        const modal = document.querySelector('.modal');
+        const para = document.querySelector('.message')
+        para.innerText = '';
+        modal.style.display = 'none';
+    }
+
+	return { showPlayerDetailsWindow, showGameWindow, hideModal, showModal };
 })();
 
 const playerDetailsWindow = (() => {
